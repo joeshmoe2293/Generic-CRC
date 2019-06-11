@@ -24,7 +24,16 @@
  */
 int main() {
     const char *s = "123456789";
+    crc_t crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
 
+    printf("CRC of %s = 0x%lX\n", s, crcOfMsg);
+
+    crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
+
+    printf("CRC of sent message = 0x%lX\n", crcOfMsg);
+
+    /*
+     * If you'd like to try timing how long it takes, run the code below
     struct timeval start, stop;
 
     gettimeofday(&start, NULL);
@@ -35,11 +44,12 @@ int main() {
     printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
 
     gettimeofday(&start, NULL);
-    crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
+    crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
     gettimeofday(&stop, NULL);
 
     printf("CRC of sent message = 0x%lX\n", crcOfMsg);
     printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
+    */
 
     return 0;
 }
