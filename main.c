@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
 #include "crc.h"
 
 /* 
@@ -23,9 +24,22 @@
  */
 int main() {
     const char *s = "123456789";
-    const crc_t crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
+
+    struct timeval start, stop;
+
+    gettimeofday(&start, NULL);
+    crc_t crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
+    gettimeofday(&stop, NULL);
+
     printf("CRC of %s = 0x%lX\n", s, crcOfMsg);
-    printf("CRC of sent message = 0x%lX\n", fastCRC(crcOfMsg, (uint8_t *)s, strlen(s)));
+    printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
+
+    gettimeofday(&start, NULL);
+    crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
+    gettimeofday(&stop, NULL);
+
+    printf("CRC of sent message = 0x%lX\n", crcOfMsg);
+    printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
 
     return 0;
 }

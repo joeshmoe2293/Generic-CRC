@@ -16,7 +16,7 @@
 #define CRC_TABLE_SIZE 256
 #define LOWEST_BYTE 0xFF
 #define LOWEST_BIT 0x1
-#define CRC_WIDTH (8 * sizeof(crc))
+#define CRC_WIDTH (8 * sizeof(crc_t))
 #define HIGHEST_BYTE (0xFF << (CRC_WIDTH - 8))
 #define HIGHEST_BIT (1 << (CRC_WIDTH - 1))
 
