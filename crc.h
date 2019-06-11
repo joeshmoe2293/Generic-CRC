@@ -1,6 +1,3 @@
-#ifndef CRC_H
-#define CRC_H
-
 /*
  * Written by Paul Vohs
  * Use as you'd like, and feel free to remove this notice if you'd like!
@@ -9,10 +6,18 @@
  * http://ross.net/crc/download/crc_v3.txt
  * https://barrgroup.com/Embedded-Systems/How-To/CRC-Calculation-C-Code
  * http://www.sunshine2k.de/articles/coding/crc/understanding_crc.html
+ *
  */
+
+#ifndef CRC_H
+#define CRC_H
 
 /*
  * Change this define to use a different CRC!
+ * At the time of writing, CRC8, CRC16 (IBM standard), 
+ * CRC-CCITT (0xFFFF), and CRC32 (Ethernet standard)
+ * are implemented and verified 
+ *
  */
 #define CRC_32
 
@@ -22,6 +27,14 @@
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned long uint32_t;
+
+/*
+ * At the time of writing this, I have not needed to use REFLECT_REMAINDER
+ * for anything, so you don't need to include it or define it for everything
+ * to function properly. If you add a CRC that reflects either the data
+ * or remainder but not the other and stuff doesn't work, let me know!
+ *
+ */
 
 #if defined(CRC_8)
 typedef uint8_t crc_t;
@@ -61,6 +74,12 @@ typedef uint32_t crc_t;
 #define FINAL_XOR_VALUE 0xFFFFFFFF
 #endif
 
+/*
+ * fastCRC takes 3 parameters, the crc of the message (or 0 if you are calculating it),
+ * a pointer to the data, and the number of bytes starting at data to be CRC'd
+ * (typecasting just to stop compiler from complaining about mismatched types)
+ *
+ */
 crc_t fastCRC(crc_t crcValue, const uint8_t msg[], uint16_t numBytes);
 
 #endif
