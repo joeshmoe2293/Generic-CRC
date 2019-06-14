@@ -75,11 +75,15 @@ typedef uint32_t crc_t;
 #endif
 
 /*
- * fastCRC takes 3 parameters, the crc of the message (or 0 if you are calculating it),
+ * Each CRC takes 3 parameters, the crc of the message (or 0 if you are calculating it),
  * a pointer to the data, and the number of bytes starting at data to be CRC'd
  * (typecasting just to stop compiler from complaining about mismatched types)
  *
  */
+void fastCRCInit();
 crc_t fastCRC(crc_t crcValue, const uint8_t msg[], uint16_t numBytes);
+
+void smallCRCInit();
+crc_t smallCRC(crc_t crcValue, const uint8_t msg[], uint16_t numBytes);
 
 #endif

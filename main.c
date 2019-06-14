@@ -16,40 +16,25 @@
 
 /* 
  * To use a specific version CRC, modify the #define CRC_XXXX in the top of crc.h
- *
- * fastCRC takes 3 parameters, the crc of the message (or 0 if you are calculating it),
+ * (Also make sure to call (small/fast)CRCinit before trying to calculate a CRC)
+ * (small/fast)CRC takes 3 parameters, the crc of the message (or 0 if you are calculating it),
  * a pointer to the data, and the number of bytes starting at data to be CRC'd
  * (typecasting just to stop compiler from complaining about mismatched types)
  *
  */
 int main() {
     const char *s = "123456789";
+    fastCRCInit();
+    smallCRCInit();
     crc_t crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
+    crc_t crcOfMsg2 = smallCRC(0, (uint8_t *)s, strlen(s));
 
-    printf("CRC of %s = 0x%lX\n", s, crcOfMsg);
+    printf("Expected CRC of %s = 0x%lX\n", s, crcOfMsg);
+    printf("New CRC of %s = 0x%lX\n", s, crcOfMsg2);
 
-    crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
+    crcOfMsg2 = smallCRC(crcOfMsg2, (uint8_t *)s, strlen(s));
 
-    printf("CRC of sent message = 0x%lX\n", crcOfMsg);
-
-    /*
-     * If you'd like to try timing how long it takes, run the code below
-    struct timeval start, stop;
-
-    gettimeofday(&start, NULL);
-    crc_t crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
-    gettimeofday(&stop, NULL);
-
-    printf("CRC of %s = 0x%lX\n", s, crcOfMsg);
-    printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
-
-    gettimeofday(&start, NULL);
-    crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
-    gettimeofday(&stop, NULL);
-
-    printf("CRC of sent message = 0x%lX\n", crcOfMsg);
-    printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
-    */
+    printf("CRC of sent message = 0x%lX\n", crcOfMsg2);
 
     return 0;
 }
