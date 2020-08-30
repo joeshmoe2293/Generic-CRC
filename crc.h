@@ -12,6 +12,8 @@
 #ifndef CRC_H
 #define CRC_H
 
+#include <stdint.h>
+
 /*
  * Change this define to use a different CRC!
  * At the time of writing, CRC8, CRC16 (IBM standard), 
@@ -23,10 +25,6 @@
 
 #define TRUE 1
 #define FALSE 0
-
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
-typedef unsigned long uint32_t;
 
 /*
  * At the time of writing this, I have not needed to use REFLECT_REMAINDER
@@ -75,10 +73,8 @@ typedef uint32_t crc_t;
 #endif
 
 /*
- * fastCRC takes 3 parameters, the crc of the message (or 0 if you are calculating it),
+ * Parameters are: crc of the message (or 0 if you are calculating it),
  * a pointer to the data, and the number of bytes starting at data to be CRC'd
- * (typecasting just to stop compiler from complaining about mismatched types)
- *
  */
 crc_t fastCRC(crc_t crcValue, const uint8_t msg[], uint16_t numBytes);
 
