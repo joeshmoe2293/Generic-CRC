@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include "crc.h"
 
@@ -23,33 +24,32 @@
  *
  */
 int main() {
-    const char *s = "123456789";
-    crc_t crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
-
-    printf("CRC of %s = 0x%lX\n", s, crcOfMsg);
-
-    crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
-
-    printf("CRC of sent message = 0x%lX\n", crcOfMsg);
-
-    /*
-     * If you'd like to try timing how long it takes, run the code below
+    char s[1024];
     struct timeval start, stop;
+    crc_t crcOfMsg;
+    int i;
 
-    gettimeofday(&start, NULL);
-    crc_t crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
-    gettimeofday(&stop, NULL);
+    puts("Please enter a message to send!");
+    fgets(s, sizeof(s), stdin);
+    s[strlen(s) - 1] = '\0';
 
-    printf("CRC of %s = 0x%lX\n", s, crcOfMsg);
-    printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
+    crcInit();
 
-    gettimeofday(&start, NULL);
-    crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
-    gettimeofday(&stop, NULL);
+    for (i = 0; i < 10; i++) {
+        gettimeofday(&start, NULL);
+        crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
+        gettimeofday(&stop, NULL);
 
-    printf("CRC of sent message = 0x%lX\n", crcOfMsg);
-    printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
-    */
+        printf("CRC of message of length %lu = 0x%lX\n", strlen(s), crcOfMsg);
+        printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
+
+        gettimeofday(&start, NULL);
+        crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
+        gettimeofday(&stop, NULL);
+
+        printf("CRC of sent message = 0x%lX\n", crcOfMsg);
+        printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
+    }
 
     return 0;
 }

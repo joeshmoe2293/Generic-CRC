@@ -9,8 +9,6 @@
  *
  */
 
-#include <stdio.h>
-#include <string.h>
 #include "crc.h"
 
 #define CRC_TABLE_SIZE 256
@@ -20,9 +18,11 @@
 #define HIGHEST_BYTE (0xFF << (CRC_WIDTH - 8))
 #define HIGHEST_BIT (1 << (CRC_WIDTH - 1))
 
-static void crcInit(crc_t crcTable[]) {
+static crc_t crcTable[CRC_TABLE_SIZE];
+
+void crcInit() {
     uint8_t bit;
-    int dividend;
+    uint16_t dividend;
     crc_t remainder;
 
     for (dividend = 0; dividend < CRC_TABLE_SIZE; dividend++) {
@@ -61,14 +61,11 @@ static void crcInit(crc_t crcTable[]) {
 */
 crc_t fastCRC(crc_t crcValue, const uint8_t msg[], uint16_t numBytes) {
     uint8_t tableIdx;
-    static uint8_t tableInit = 0;
     uint16_t currentByte;
-    static crc_t crcTable[CRC_TABLE_SIZE];
     crc_t remainder = INITIAL_REMAINDER;
 
-    if (!tableInit) {
+    if (crcTable[1] == 0) {
         crcInit(crcTable);
-        tableInit = 1;
     }
 
     for (currentByte = 0; currentByte < numBytes; currentByte++) {

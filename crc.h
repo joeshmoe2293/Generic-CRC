@@ -72,6 +72,8 @@ typedef uint32_t crc_t;
 #define FINAL_XOR_VALUE 0xFFFFFFFF
 #endif
 
+void crcInit();
+
 /*
  * Parameters are: crc of the message (or 0 if you are calculating it),
  * a pointer to the data, and the number of bytes starting at data to be CRC'd
