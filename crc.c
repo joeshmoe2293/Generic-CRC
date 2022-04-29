@@ -110,5 +110,5 @@ crc_t calcCRC(crc_t crcValue, const uint8_t *msg, uint16_t numBytes)
 #endif
     }
 
-    return remainder ^ FINAL_XOR_VALUE;
+    return (remainder ^ crcValue) ^ FINAL_XOR_VALUE;
 }

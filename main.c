@@ -34,9 +34,13 @@ int main() {
 
     crcOfMsg = fastCRC(0, data, sizeof(data));
     printf("CRC (using table lookups) is: 0x%X\n", crcOfMsg);
+    crcOfMsg = fastCRC(crcOfMsg, data, sizeof(data));
+    printf("Remainder after applying calculated CRC: 0x%X\n", crcOfMsg);
 
     crcOfMsg = calcCRC(0, data, sizeof(data));
     printf("CRC without lookups is: 0x%X\n", crcOfMsg);
+    crcOfMsg = calcCRC(crcOfMsg, data, sizeof(data));
+    printf("Remainder after applying calculated CRC: 0x%X\n", crcOfMsg);
 
     return 0;
 }
