@@ -24,32 +24,19 @@
  *
  */
 int main() {
-    char s[1024];
-    struct timeval start, stop;
     crc_t crcOfMsg;
-    int i;
-
-    puts("Please enter a message to send!");
-    fgets(s, sizeof(s), stdin);
-    s[strlen(s) - 1] = '\0';
 
     crcInit();
 
-    for (i = 0; i < 10; i++) {
-        gettimeofday(&start, NULL);
-        crcOfMsg = fastCRC(0, (uint8_t *)s, strlen(s));
-        gettimeofday(&stop, NULL);
+    uint8_t data[] = {1, 2, 3, 4};
 
-        printf("CRC of message of length %lu = 0x%lX\n", strlen(s), crcOfMsg);
-        printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
+    printf("For the %s type of CRC:\n", CRC_STRING);
 
-        gettimeofday(&start, NULL);
-        crcOfMsg = fastCRC(crcOfMsg, (uint8_t *)s, strlen(s));
-        gettimeofday(&stop, NULL);
+    crcOfMsg = fastCRC(0, data, sizeof(data));
+    printf("CRC (using table lookups) is: 0x%X\n", crcOfMsg);
 
-        printf("CRC of sent message = 0x%lX\n", crcOfMsg);
-        printf("Calculation of crc took %lu microseconds\n", stop.tv_usec - start.tv_usec);
-    }
+    crcOfMsg = calcCRC(0, data, sizeof(data));
+    printf("CRC without lookups is: 0x%X\n", crcOfMsg);
 
     return 0;
 }

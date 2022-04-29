@@ -10,6 +10,7 @@
  */
 
 #include "crc.h"
+#include <stdio.h>
 
 #define CRC_TABLE_SIZE 256
 #define LOWEST_BYTE 0xFF
@@ -79,4 +80,35 @@ crc_t fastCRC(crc_t crcValue, const uint8_t msg[], uint16_t numBytes) {
     }
 
     return (remainder ^ crcValue) ^ FINAL_XOR_VALUE;
+}
+
+crc_t calcCRC(crc_t crcValue, const uint8_t *msg, uint16_t numBytes)
+{
+    crc_t remainder = INITIAL_REMAINDER;
+
+    for (int currentByte = 0; currentByte < numBytes; currentByte++) {
+#if REVERSE_DATA
+        remainder ^= msg[currentByte];
+
+        for (int bit = 7; bit >= 0; bit--) {
+            if (remainder & LOWEST_BIT) {
+                remainder = (remainder >> 1) ^ REVERSED_POLYNOMIAL;
+            } else {
+                remainder = remainder >> 1;
+            }
+        }
+#else 
+        remainder ^= (msg[currentByte] << (CRC_WIDTH - 8));
+
+        for (int bit = 7; bit >= 0; bit--) {
+            if (remainder & HIGHEST_BIT) {
+                remainder = (remainder << 1) ^ POLYNOMIAL;
+            } else {
+                remainder = remainder << 1;
+            }
+        }
+#endif
+    }
+
+    return remainder ^ FINAL_XOR_VALUE;
 }

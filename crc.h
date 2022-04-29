@@ -21,6 +21,9 @@
  * are implemented and verified 
  *
  */
+//#define CRC_8
+//#define CRC_16
+//#define CRC_CCITT
 #define CRC_32
 
 #define TRUE 1
@@ -36,40 +39,44 @@
 
 #if defined(CRC_8)
 typedef uint8_t crc_t;
+#define CRC_STRING "CRC_8"
 #define POLYNOMIAL 0xD5
 #define REFLECT_DATA FALSE
 #define REFLECT_REMAINDER FALSE
 #define INITIAL_REMAINDER 0x00
 #define FINAL_XOR_VALUE 0x00
-#endif
 
-#if defined(CRC_16)
+#elif defined(CRC_16)
 typedef uint16_t crc_t;
+#define CRC_STRING "CRC_16"
 #define POLYNOMIAL 0x8005
 #define REVERSED_POLYNOMIAL 0xA001
 #define REVERSE_DATA TRUE
 #define REVERSE_REMAINDER TRUE
 #define INITIAL_REMAINDER 0x0000
 #define FINAL_XOR_VALUE 0x0000
-#endif
 
-#if defined(CRC_CCITT)
+#elif defined(CRC_CCITT)
 typedef uint16_t crc_t;
+#define CRC_STRING "CRC_CCITT"
 #define POLYNOMIAL 0x1021
 #define REVERSE_DATA FALSE
 #define REVERSE_REMAINDER FALSE
 #define INITIAL_REMAINDER 0xFFFF
 #define FINAL_XOR_VALUE 0x0000
-#endif
 
-#if defined(CRC_32)
+#elif defined(CRC_32)
 typedef uint32_t crc_t;
+#define CRC_STRING "CRC_32"
 #define POLYNOMIAL 0x04C11DB7
 #define REVERSED_POLYNOMIAL 0xEDB88320 
 #define REVERSE_DATA TRUE
 #define REVRSE_REMAINDER TRUE
 #define INITIAL_REMAINDER 0xFFFFFFFF
 #define FINAL_XOR_VALUE 0xFFFFFFFF
+
+#else
+const char *CRC_STRING = "NOT EXPLICITLY DEFINED";
 #endif
 
 void crcInit();
@@ -79,5 +86,7 @@ void crcInit();
  * a pointer to the data, and the number of bytes starting at data to be CRC'd
  */
 crc_t fastCRC(crc_t crcValue, const uint8_t msg[], uint16_t numBytes);
+
+crc_t calcCRC(crc_t crcValue, const uint8_t *msg, uint16_t numBytes);
 
 #endif
